@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Étudiants</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #6366f1;
+            --accent-color: #818cf8;
+            --dark-bg: #0f172a;
+        }
+
+        body {
+            background-color: #f8fafc;
+            font-family: 'Poppins', sans-serif;
+            padding-top: 80px; /* Hauteur du header */
+        }
+
+        /* Header fixe */
+        .navbar {
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            height: 80px;
+            z-index: 1030;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+        }
+
+        .main-content {
+            margin-top: 30px;
+            padding: 0 15px;
+        }
+
+        /* Bouton principal */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        /* Tableau */
+        .equipment-table {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .equipment-table thead {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .equipment-table th {
+            padding: 1rem;
+            font-weight: 600;
+        }
+
+        .equipment-table td {
+            padding: 1.2rem;
+            vertical-align: middle;
+            background: white;
+            border-bottom: 2px solid #f8fafc;
+        }
+
+        /* Modal */
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+
+        /* Formulaire */
+        .floating-label {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .floating-label input {
+            height: 50px;
+            padding-top: 1.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .floating-label label {
+            position: absolute;
+            top: 12px;
+            left: 15px;
+            color: #64748b;
+            transition: all 0.3s ease;
+        }
+
+        .floating-label input:focus ~ label,
+        .floating-label input:not(:placeholder-shown) ~ label {
+            top: 2px;
+            left: 10px;
+            font-size: 0.8em;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">Gestion UFR</a>
+
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/responsable/etudiant}">
+                        <i class="fas fa-users-cog me-2"></i>Étudiants
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/gestion-materiel}">
+                        <i class="fas fa-boxes me-2"></i>Matériel
+                    </a>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center">
+                <div class="dropdown">
+                    <a class="btn btn-link text-white dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle me-2"></i>
+                        <span th:text="${prenom + ' ' + nom}"></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Paramètres</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Déconnexion</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenu Principal -->
+<div class="container main-content">
+    <!-- En-tête de section -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h1 class="text-primary mb-0">Gestion des Étudiants</h1>
+        <button class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#formAjouterEtudiant">
+            <i class="fas fa-user-plus me-2"></i>Nouvel Étudiant
+        </button>
+    </div>
+
+    <!-- Tableau -->
+    <div class="equipment-table">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Matricule</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>UFR</th>
+                <th>Filière</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="etudiant : ${etudiants}">
+                <td th:text="${etudiant.matricule}"></td>
+                <td th:text="${etudiant.nom}"></td>
+                <td th:text="${etudiant.prenom}"></td>
+                <td th:text="${etudiant.ufr}"></td>
+                <td th:text="${etudiant.filiere}"></td>
+                <td th:text="${etudiant.username}"></td>
+                <td>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-primary"
+                                data-bs-toggle="modal"
+                                th:attr="data-bs-target='#formModifierEtudiant'+${etudiant.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-warning">
+                            <i class="fas fa-archive"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Ajout Étudiant -->
+<div class="modal fade" id="formAjouterEtudiant" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajouter un Étudiant</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form th:action="@{/responsable/ajouterEtudiant}" method="post">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="floating-label">
+                                <input type="text" class="form-control" name="matricule" required>
+                                <label>Matricule</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="floating-label">
+                                <input type="text" class="form-control" name="ufr" required>
+                                <label>UFR</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="floating-label">
+                                <input type="text" class="form-control" name="nom" required>
+                                <label>Nom</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="floating-label">
+                                <input type="text" class="form-control" name="prenom" required>
+                                <label>Prénom</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="floating-label">
+                                <input type="email" class="form-control" name="username" required>
+                                <label>Email universitaire</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:each="etudiant : ${etudiants}" class="modal fade" th:id="'formModifierEtudiant' + ${etudiant.id}" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifier l'Étudiant</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form th:action="@{/responsable/modifierEtudiant}" method="post">
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="floating-label">
+                                <input type="text" class="form-control" name="matricule"
+                                       th:value="${etudiant.matricule}" required>
+                                <label>Matricule</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="floating-label">
+                                <input type="text" class="form-control" name="ufr"
+                                       th:value="${etudiant.ufr}" required>
+                                <label>UFR</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="floating-label">
+                                <input type="text" class="form-control" name="nom"
+                                       th:value="${etudiant.nom}" required>
+                                <label>Nom</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="floating-label">
+                                <input type="text" class="form-control" name="prenom"
+                                       th:value="${etudiant.prenom}" required>
+                                <label>Prénom</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="floating-label">
+                                <input type="email" class="form-control" name="username"
+                                       th:value="${etudiant.username}" required>
+                                <label>Email universitaire</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       name="active" th:checked="${etudiant.active}">
+                                <label class="form-check-label">Compte actif</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

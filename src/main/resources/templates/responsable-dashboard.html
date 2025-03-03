@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord - Responsable UFR</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #6366f1;
+            --accent-color: #818cf8;
+            --dark-bg: #0f172a;
+            --glass-effect: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            background-color: #f8fafc;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Header ajusté */
+        .navbar {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid var(--glass-effect);
+            min-height: 80px;
+            padding: 0.5rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+            padding: 0.5rem 0;
+        }
+
+
+
+        .nav-link {
+            color: #e2e8f0 !important;
+            padding: 1rem 1.5rem !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            padding: 4px 9px;
+            font-size: 0.75rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+            margin: 0 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-icon:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Contenu principal */
+        .container {
+            padding-top: 50px;
+        }
+
+        .welcome-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .welcome-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1));
+            transform: rotate(45deg);
+            animation: shine 8s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(45deg) translateX(-50%); }
+            100% { transform: rotate(45deg) translateX(50%); }
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .metric-card:hover::after {
+            opacity: 1;
+        }
+
+        .metric-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            box-shadow: 0 4px 6px rgba(79, 70, 229, 0.2);
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Menu déroulant profil */
+        .dropdown-menu {
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            background: rgba(15, 23, 42, 0.95);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin-top: 0.5rem;
+        }
+
+        .dropdown-item {
+            color: #e2e8f0;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(255,255,255,0.05);
+            padding-left: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .navbar {
+                min-height: 70px;
+            }
+
+            .navbar-brand {
+                font-size: 1.3rem;
+            }
+
+            .container {
+                padding-top: 100px;
+            }
+
+            .nav-link {
+                padding: 0.8rem !important;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <span>Gestion Matériel</span>
+        </a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/responsable/etudiant}">
+                        <i class="fas fa-users-cog me-2"></i> Utilisateurs
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/gestion-materiel}">
+                        <i class="fas fa-boxes me-2"></i>Matériel
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/reservations}">
+                        <i class="fas fa-calendar-check me-2"></i>Réservations
+                    </a>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center">
+                <div class="position-relative me-3">
+                    <i class="fas fa-bell nav-icon text-white"></i>
+                    <span class="notification-badge">3</span>
+                </div>
+
+                <i class="fas fa-sync-alt nav-icon text-white" onclick="location.reload()"></i>
+
+                <div class="dropdown ms-3">
+                    <a class="btn btn-link dropdown-toggle d-flex align-items-center"
+                       href="#" role="button" data-bs-toggle="dropdown">
+                        <div class="ms-2 text-start">
+                            <div class="text-white small">Dr. <span th:text="${prenom + ' ' + nom}"></span></div>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Paramètres</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Déconnexion</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenu Principal -->
+<div class="container pt-5">
+    <div class="welcome-section text-white">
+        <h1 class="display-5 fw-bold mb-3">Bonjour, <span th:text="${prenom}" class="gradient-text"></span>!</h1>
+        <p class="lead mb-0">Plateforme de gestion intégrée de l'UFR</p>
+    </div>
+
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="metric-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="text-end">
+                    <h2 class="mb-0 display-6">1,452</h2>
+                    <span class="text-muted">Étudiants</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="metric-card">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="metric-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="text-end">
+                    <h2 class="mb-0 display-6">289</h2>
+                    <span class="text-muted">Documents</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="metric-card">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="metric-icon">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <div class="text-end">
+                    <h2 class="mb-0 display-6">56</h2>
+                    <span class="text-muted">Matériels</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
