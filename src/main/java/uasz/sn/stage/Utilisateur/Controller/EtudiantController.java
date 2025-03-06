@@ -56,6 +56,7 @@ public class EtudiantController {
 
         // 2. Mettre à jour les champs modifiables
         existingEtudiant.setNom(etudiant.getNom());
+        existingEtudiant.setMatricule(etudiant.getMatricule());
         existingEtudiant.setPrenom(etudiant.getPrenom());
         existingEtudiant.setUsername(etudiant.getUsername());
         existingEtudiant.setActive(etudiant.isActive()); // Si nécessaire
