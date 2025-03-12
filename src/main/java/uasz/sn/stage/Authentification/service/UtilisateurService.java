@@ -2,6 +2,8 @@ package uasz.sn.stage.Authentification.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,4 +71,25 @@ public class UtilisateurService {
 
         return role;
     }
+
+    public Utilisateur getUtilisateurConnecte() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (principal instanceof UserDetails userDetails) {
+            String email = userDetails.getUsername(); // ✅ Récupération correcte de l'email
+            return utilisateurRepository.findByUsername(email)
+                    .orElseThrow(() -> new IllegalStateException("Utilisateur non trouvé"));
+        }
+        throw new IllegalStateException("Utilisateur non authentifié");
+    }
+    public Utilisateur getUtilisateurParId(Long utilisateurId) {
+        Optional<Utilisateur> utilisateurOpt = utilisateurRepository.findById(utilisateurId);
+        if (utilisateurOpt.isPresent()) {
+            return utilisateurOpt.get();
+        } else {
+            throw new RuntimeException("Utilisateur non trouvé avec l'ID : " + utilisateurId);
+        }
+    }
+
+
 }

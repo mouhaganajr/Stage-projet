@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord - Administrateur</title>
+    <title>Liste des Matériels</title>
 
     <!-- Bootstrap 5 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
@@ -223,45 +223,125 @@
     </div>
 </nav>
 
-<!-- Contenu Principal -->
-<div class="container pt-5 mt-5">
-    <div class="welcome-section text-white">
-        <h1 class="display-5 fw-bold">Bonjour, <span th:text="${prenom}" class="gradient-text"></span>!</h1>
-        <p class="lead">Gestion centralisée de la plateforme administrative</p>
-    </div>
 
-    <div class="metrics-grid">
-        <div class="metric-card">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="metric-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <h2 class="mb-0">1,452</h2>
-            </div>
-            <div class="mt-3 text-muted">Étudiants enregistrés</div>
-        </div>
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">📋 Liste des Matériels</h2>
 
-        <div class="metric-card">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="metric-icon">
-                    <i class="fas fa-user-tie"></i>
-                </div>
-                <h2 class="mb-0">42</h2>
-            </div>
-            <div class="mt-3 text-muted">Responsables actifs</div>
-        </div>
+    <!-- Bouton Ajouter Matériel -->
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#form_Ajouter_Materiel">
+        <i class="fas fa-plus"></i> Ajouter un Matériel
+    </button>
 
-        <div class="metric-card">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="metric-icon">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <h2 class="mb-0">289</h2>
+    <!-- Tableau des Matériels -->
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>Icône</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Catégorie</th>
+            <th>État</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="materiel : ${materiels}">
+            <td>
+                <!-- Icônes en fonction de la catégorie -->
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).ORDINATEUR}" class="fas fa-laptop fa-2x"></i>
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).IMPRIMANTE}" class="fas fa-print fa-2x"></i>
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).SERVEUR}" class="fas fa-server fa-2x"></i>
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).CABLE_HDMI}" class="fas fa-plug fa-2x"></i>
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).CABLE_VGA}" class="fas fa-project-diagram fa-2x"></i>
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).MULTIPRISE}" class="fas fa-power-strip fa-2x"></i>
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).VIDEO_PROJECTEUR}" class="fas fa-video fa-2x"></i>
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).CABLE_ETHENET}" class="fas fa-network-wired fa-2x"></i>
+
+            </td>
+            <td th:text="${materiel.nom}"></td>
+            <td th:text="${materiel.description}"></td>
+            <td th:text="${materiel.categorie}"></td>
+            <td th:text="${materiel.etat}"></td>
+            <td>
+                <a th:href="@{/materiels/modifier/{id}(id=${materiel.id})}" class="btn btn-warning btn-sm">Modifier</a>
+                <a th:href="@{/materiels/supprimer/{id}(id=${materiel.id})}" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce matériel ?');">Supprimer</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Ajouter Matériel -->
+<div class="modal fade" id="form_Ajouter_Materiel" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Ajouter un Matériel</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="mt-3 text-muted">Nouveaux documents</div>
+            <form id="ajoutMaterielForm" th:action="@{/materiels/ajouter}" method="post">
+
+            <div class="modal-body">
+                    <!-- Champ Nom -->
+                    <div class="mb-3">
+                        <label class="form-label">Nom</label>
+                        <input type="text" class="form-control" name="nom" required>
+                    </div>
+
+                    <!-- Champ Description -->
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <input type="text" class="form-control" name="description" required>
+                    </div>
+
+                    <!-- Champ Catégorie -->
+                    <div class="mb-3">
+                        <label class="form-label">Catégorie</label>
+                        <select class="form-control" name="categorie" required>
+                            <option th:each="categorie : ${T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).values()}"
+                                    th:value="${categorie}" th:text="${categorie}"></option>
+                        </select>
+                    </div>
+
+                    <!-- Champ État -->
+                    <div class="mb-3">
+                        <label class="form-label">État</label>
+                        <input type="text" class="form-control" name="etat" required>
+                    </div>
+
+                    <!-- Champ UFR -->
+                    <div class="mb-3">
+                        <label class="form-label">UFR</label>
+                        <select class="form-control" name="ufr.id" required>
+                            <option th:each="ufr : ${ufrs}" th:value="${ufr.id}" th:text="${ufr.nom}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Ajouter</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#ajoutMaterielForm").submit(function(event) {
+            event.preventDefault(); // Empêche le rechargement de la page
+            var formData = $(this).serialize(); // Récupère les données du formulaire
+
+            $.post("/materiels/ajouter", formData, function() {
+                $("#form_Ajouter_Materiel").modal("hide"); // Ferme le modal
+                location.reload(); // Recharge la page pour voir le nouveau matériel
+            });
+        });
+    });
+</script>
+
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

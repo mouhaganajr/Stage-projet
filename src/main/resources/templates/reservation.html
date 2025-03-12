@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espace Étudiant</title>
+    <title>Gestion des Réservations</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -20,13 +20,6 @@
             --secondary-color: #60a5fa;
             --accent-color: #93c5fd;
             --dark-bg: #0F172AFF;
-        }
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 1px;
-            background: linear-gradient(45deg, #8b5cf6, var(--primary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         body {
@@ -69,6 +62,14 @@
             padding: 4px 8px;
             font-size: 0.75rem;
         }
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(45deg, #8b5cf6, var(--primary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
 
         .student-avatar {
             width: 40px;
@@ -171,12 +172,96 @@
             </div>
         </div>
     </div>
-</nav>
+</nav> <br> <br>
 
-<!-- Contenu Principal -->
-<div class="container pt-5 mt-5">
-    <!-- Le contenu spécifique de la page sera inséré ici -->
+<!-- Contenu principal -->
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">📋 Liste des Réservations</h2>
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#form_Ajouter_Reservation">
+        <i class="fas fa-plus"></i> Faire une réservation
+    </button>
+
+    <!-- Modal Ajouter Réservation -->
+    <div class="modal fade" id="form_Ajouter_Reservation" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Faire une réservation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form th:action="@{/reservation/faireUneReservation}" method="post" class="p-3">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Matériel</label>
+                            <select class="form-control" name="materielId" required>
+                                <option value="">-- Sélectionner un matériel --</option>
+                                <option th:each="materiel : ${materiels}"
+                                        th:value="${materiel.id}"
+                                        th:text="${materiel.nom}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="dateDebut" class="form-label">Date de début</label>
+                            <input type="datetime-local" class="form-control" id="dateDebut" name="dateDebut" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="dateFin" class="form-label">Date de fin</label>
+                            <input type="datetime-local" class="form-control" id="dateFin" name="dateFin" required>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="hidden" name="utilisateurId" th:value="${utilisateur.id}">
+                        </div>
+                    </div>
+                    <div class="modal-footer mt-3">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter Réservation</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Tableau des réservations -->
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Utilisateur</th>
+            <th>Matériel</th>
+            <th>Date Début</th>
+            <th>Date Fin</th>
+            <th>Statut</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="reservation : ${reservations}">
+            <td th:text="${reservation.utilisateur.nom}"></td>
+            <td th:text="${reservation.materiel.nom}"></td>
+            <td th:text="${reservation.dateDebut}"></td>
+            <td th:text="${reservation.dateFin}"></td>
+            <td>
+                <span th:if="${reservation.statut == T(uasz.sn.stage.Reservation.Modele.Statut).APPROUVE}" class="badge bg-success">Approuvé</span>
+                <span th:if="${reservation.statut == T(uasz.sn.stage.Reservation.Modele.Statut).ENATTENTE}" class="badge bg-warning">En attente</span>
+                <span th:if="${reservation.statut == T(uasz.sn.stage.Reservation.Modele.Statut).REJETE}" class="badge bg-danger">Rejeté</span>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let now = new Date();
+
+        // Formatter la date et l'heure au format YYYY-MM-DDTHH:MM
+        let formattedDateTime = now.toISOString().slice(0, 16);
+
+        // Appliquer la valeur au champ de début
+        document.getElementById("dateDebut").value = formattedDateTime;
+    });
+</script>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord - Responsable UFR</title>
+    <title>Gestion des Réservations</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -13,7 +13,6 @@
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
     <style>
         :root {
             --primary-color: #4f46e5;
@@ -48,8 +47,6 @@
             font-size: 1.5rem;
             padding: 0.5rem 0;
         }
-
-
 
         .nav-link {
             color: #e2e8f0 !important;
@@ -272,56 +269,58 @@
             </div>
         </div>
     </div>
-</nav>
-
-<!-- Contenu Principal -->
-<div class="container pt-5">
-    <div class="welcome-section text-white">
-        <h1 class="display-5 fw-bold mb-3">Bonjour, <span th:text="${prenom}" class="gradient-text"></span>!</h1>
-        <p class="lead mb-0">Plateforme de gestion intégrée de l'UFR</p>
-    </div>
-
-    <div class="metrics-grid">
-        <div class="metric-card">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="metric-icon">
-                    <i class="fas fa-users"></i>
+</nav> <br> <br>
+<!-- Contenu principal -->
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">📋 Liste des Réservations</h2>
+    <!-- Tableau des réservations -->
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Utilisateur</th>
+            <th>Matériel</th>
+            <th>Date Début</th>
+            <th>Date Fin</th>
+            <th>Operation</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="reservation : ${reservations}">
+            <td th:text="${reservation.utilisateur.nom}"></td>
+            <td th:text="${reservation.materiel.nom}"></td>
+            <td th:text="${reservation.dateDebut}"></td>
+            <td th:text="${reservation.dateFin}"></td>
+            <td>
+                <div th:if="${reservation.message != null}">
+                    <span th:text="${reservation.message}"></span>
                 </div>
-                <div class="text-end">
-                    <h2 class="mb-0 display-6">1,452</h2>
-                    <span class="text-muted">Étudiants</span>
+                <div th:unless="${reservation.message != null}">
+                    <form th:action="@{/reservation/approuver}" method="post" style="display: inline;">
+                        <input type="hidden" name="reservationId" th:value="${reservation.id}">
+                        <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-check"></i> Approuver</button>
+                    </form>
+                    <form th:action="@{/reservation/rejeter}" method="post" style="display: inline;">
+                        <input type="hidden" name="reservationId" th:value="${reservation.id}"/>
+                        <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-times"></i> Rejeter</button>
+                    </form>
                 </div>
-            </div>
-        </div>
-
-        <div class="metric-card">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="metric-icon">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <div class="text-end">
-                    <h2 class="mb-0 display-6">289</h2>
-                    <span class="text-muted">Documents</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="metric-card">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="metric-icon">
-                    <i class="fas fa-box-open"></i>
-                </div>
-                <div class="text-end">
-                    <h2 class="mb-0 display-6">56</h2>
-                    <span class="text-muted">Matériels</span>
-                </div>
-            </div>
-        </div>
-    </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let now = new Date();
 
+        // Formatter la date et l'heure au format YYYY-MM-DDTHH:MM
+        let formattedDateTime = now.toISOString().slice(0, 16);
+
+        // Appliquer la valeur au champ de début
+        document.getElementById("dateDebut").value = formattedDateTime;
+    });
+</script>
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>
