@@ -18,6 +18,7 @@ private  AdministrateurRepository administrateurRepository;
     public Administrateur ajouterAdministrateur(Administrateur administrateur) {
         return administrateurRepository.save(administrateur);
     }
+    public Administrateur rechercher(Long id) {return administrateurRepository.findById(id).get();}
 
     public List<Administrateur> getTousLesAdministrateurs() {
         return administrateurRepository.findAll();
