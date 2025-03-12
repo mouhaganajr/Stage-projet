@@ -185,7 +185,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/admin/home}">
+                    <a class="nav-link" th:href="@{/admin/dashboard}">
                         <i class="fas fa-home me-2"></i>Accueil
                     </a>
                 </li>
@@ -196,8 +196,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/admin/etudiants}">
-                        <i class="fas fa-users me-2"></i>Étudiants
+                    <a class="nav-link" th:href="@{/admin/materiels}">
+                        <i class="fas fa-cubes me-2"></i>Matériel
                     </a>
                 </li>
                 <li class="nav-item">
@@ -357,8 +357,41 @@
                     <form th:action="@{/admin/modifierResponsable}" method="post">
                         <input type="hidden" name="id" th:value="${responsable.id}"/>
                         <div class="modal-body">
-                            <!-- Champs de formulaire similaires à l'ajout -->
-                        </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="floating-label">
+                                        <input name="id" th:value="${responsable.id}" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="floating-label">
+                                        <input type="text" class="form-control" name="nom"
+                                               th:value="${responsable.nom}" required>
+                                        <label>Nom</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="floating-label">
+                                        <input type="text" class="form-control" name="prenom"
+                                               th:value="${responsable.prenom}" required>
+                                        <label>Prénom</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="floating-label">
+                                        <input type="email" class="form-control" name="username"
+                                               th:value="${responsable.username}" required>
+                                        <label>Email universitaire</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch"
+                                               name="active" th:checked="${responsable.active}">
+                                        <label class="form-check-label">Compte actif</label>
+                                    </div>
+                                </div>
+                            </div>                        </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-sync me-2"></i>Mettre à jour

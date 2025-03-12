@@ -196,7 +196,6 @@
                 <th>Nom</th>
                 <th>Prénom</th>
                 <th>UFR</th>
-                <th>Filière</th>
                 <th>Email</th>
                 <th>Actions</th>
             </tr>
@@ -207,7 +206,6 @@
                 <td th:text="${etudiant.nom}"></td>
                 <td th:text="${etudiant.prenom}"></td>
                 <td th:text="${etudiant.ufr}"></td>
-                <td th:text="${etudiant.filiere}"></td>
                 <td th:text="${etudiant.username}"></td>
                 <td>
                     <div class="d-flex gap-2">
@@ -292,16 +290,14 @@
                     <div class="row g-3">
                         <div class="col-md-6">
                             <div class="floating-label">
-                                <input type="text" class="form-control" name="matricule"
-                                       th:value="${etudiant.matricule}" required>
-                                <label>Matricule</label>
+                                <input name="id" th:value="${etudiant.id}" readonly>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="floating-label">
-                                <input type="text" class="form-control" name="ufr"
-                                       th:value="${etudiant.ufr}" required>
-                                <label>UFR</label>
+                                <input type="text" class="form-control" name="matricule"
+                                       th:value="${etudiant.matricule}" required>
+                                <label>Matricule</label>
                             </div>
                         </div>
                         <div class="col-md-6">
