@@ -21,6 +21,7 @@ import uasz.sn.stage.Reservation.Service.ReservationService;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
@@ -45,7 +46,7 @@ public class ReservationController {
     @RequestMapping(value = "/etudiant/Reservation", method = RequestMethod.GET)
     public String listeReservation(Model model,
                                    @RequestParam(value = "utilisateurId", required = false) Long utilisateurId,
-                                   @RequestParam(value = "ufrid", required = false) Long ufrid) {
+                                   @RequestParam(value = "ufrid", required = false) Long ufrid,Principal principal) {
         // Récupérer l'utilisateur connecté si `utilisateurId` n'est pas fourni
         if (utilisateurId == null) {
             Utilisateur utilisateur = utilisateurService.getUtilisateurConnecte();
@@ -74,6 +75,10 @@ public class ReservationController {
         // Ajouter la liste des UFRs
         List<Ufr> ufrs = ufrService.literUfr();
         model.addAttribute("ufrs", ufrs);
+        Utilisateur utilisateur = utilisateurService.getUtilisateurParUsername(principal.getName());
+        model.addAttribute("utilisateur", utilisateur);
+        model.addAttribute("nom", utilisateur.getNom());
+        model.addAttribute("prenom", utilisateur.getPrenom().charAt(0));
 
         return "reservation";
     }
@@ -135,7 +140,7 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "/admin/Reservation", method = RequestMethod.GET)
-    public String afficherReservation(Model model) {
+    public String afficherReservation(Model model, Principal principal) {
         List<ReservationModele> reservations = reservationService.lister();
         logger.info("Nombre de réservations trouvées : " + reservations.size());
 
@@ -145,6 +150,10 @@ public class ReservationController {
         model.addAttribute("materiels",materiels);
         model.addAttribute("reservations", reservations);
         model.addAttribute("utilisateurs", utilisateurs);
+        Utilisateur utilisateur = utilisateurService.getUtilisateurParUsername(principal.getName());
+        model.addAttribute("utilisateur", utilisateur);
+        model.addAttribute("nom", utilisateur.getNom());
+        model.addAttribute("prenom", utilisateur.getPrenom().charAt(0));
         return "reservationRes";
 
 
