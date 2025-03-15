@@ -32,6 +32,7 @@ public class AdministrateurController {
         Utilisateur utilisateur=utilisateurService.getUtilisateurParUsername(principal.getName());
         model.addAttribute("nom",utilisateur.getNom());
         model.addAttribute("prenom",utilisateur.getPrenom().charAt(0));
+
         return "admin-dashboard";
     }
 

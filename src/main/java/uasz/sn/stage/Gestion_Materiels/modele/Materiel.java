@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import uasz.sn.stage.Gestion_Ufr.modele.Ufr;
 import uasz.sn.stage.Reservation.Modele.ReservationModele;
+import uasz.sn.stage.Utilisateur.model.ResponsableUFR;
 
 import java.util.List;
 
@@ -34,4 +35,8 @@ public class Materiel {
 
     @OneToMany(mappedBy = "materiel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ReservationModele> reservations;
+
+//    @ManyToOne
+//    @JoinColumn(name = "chef_id", nullable = false)
+//    private ResponsableUFR responsable;
 }

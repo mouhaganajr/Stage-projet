@@ -10,10 +10,13 @@ import uasz.sn.stage.Authentification.repository.UtilisateurRepository;
 import uasz.sn.stage.Gestion_Materiels.modele.Materiel;
 import uasz.sn.stage.Gestion_Materiels.repository.MaterielRepository;
 
+import uasz.sn.stage.Notification.Modele.Notification;
+import uasz.sn.stage.Notification.Service.NotificationService;
 import uasz.sn.stage.Reservation.Controller.ReservationController;
 import uasz.sn.stage.Reservation.Modele.ReservationModele;
 import uasz.sn.stage.Reservation.Modele.Statut;
 import uasz.sn.stage.Reservation.Repository.ReservationRepository;
+import uasz.sn.stage.Utilisateur.model.ResponsableUFR;
 
 
 import java.time.LocalDateTime;
@@ -32,6 +35,9 @@ public class ReservationService {
     private MaterielRepository materielRepository;
 
     @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
     private UtilisateurRepository utilisateurRepository;
     private static final Logger logger = LoggerFactory.getLogger(ReservationService.class);
     public ReservationModele creerReservation(Long utilisateurId, Long materielId, LocalDateTime dateDebut, LocalDateTime dateFin) {
@@ -48,6 +54,13 @@ public class ReservationService {
             reservation.setDateFin(dateFin);
             reservation.setStatut(Statut.ENATTENTE); // Direct reference to the enum constant
 
+
+            // Notification au responsable
+//            Notification notification = new Notification();
+//            notification.setLu(false);
+////          notification.setDestinataire(materiel.getResponsable());
+//            notification.setMessage("L'étudiant " + utilisateur.getPrenom() + " " + utilisateur.getNom() + " a demandé une réservation pour le matériel " + materiel.getNom() + ".");
+//            notificationService.envoyerNotification(notification);
             return reservationRepository.save(reservation);
         } catch (Exception e) {
             // Log the exception (assuming a logger is available)
@@ -70,6 +83,12 @@ public class ReservationService {
         reservation.setMessage("Vous avez approuvé cette réservation.");
         reservation.setStatut(Statut.valueOf("APPROUVE"));
         reservationRepository.save(reservation);
+
+        Notification notification = new Notification();
+        notification.setLu(false);
+        notification.setDestinataire(reservation.getUtilisateur());
+        notification.setMessage("Votre réservation pour le matériel " + reservation.getMateriel().getNom() + " a été approuvée.");
+        notificationService.envoyerNotification(notification);
     }
 
     public void rejeterReservation(Long reservationId) {
@@ -78,6 +97,11 @@ public class ReservationService {
         reservation.setMessage("Vous avez rejeté cette réservation.");
         reservation.setStatut(Statut.valueOf("REJETE"));
         reservationRepository.save(reservation);
+        Notification notification = new Notification();
+        notification.setLu(false);
+        notification.setDestinataire(reservation.getUtilisateur());
+        notification.setMessage("Votre réservation pour le matériel " + reservation.getMateriel().getNom() + " a été rejetée.");
+        notificationService.envoyerNotification(notification);
     }
 
     public void supprimerReservation(Long reservationId) {reservationRepository.deleteById(reservationId);}

@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uasz.sn.Gestion_Enseignement.Utilisateur.modele.Enseignant;
+import uasz.sn.stage.Authentification.modele.Utilisateur;
+import uasz.sn.stage.Utilisateur.model.Administrateur;
+import uasz.sn.stage.Utilisateur.model.Etudiant;
+import uasz.sn.stage.Utilisateur.model.ResponsableUFR;
 
 import java.util.Date;
 
@@ -23,6 +26,6 @@ public class Notification {
 
     @ManyToOne
     @JoinColumn(name = "destinataire_id", nullable = false)
-    private Enseignant destinataire;
+    private Utilisateur destinataire;
 
 }

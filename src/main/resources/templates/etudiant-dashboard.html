@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,24 +28,15 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
         body {
             background-color: #f0f9ff;
             font-family: 'Poppins', sans-serif;
             min-height: 100vh;
         }
-
         .student-header {
             background: var(--dark-bg);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
-        .nav-logo {
-            width: 45px;
-            height: 45px;
-            margin-right: 15px;
-        }
-
         .nav-student-link {
             color: #fff !important;
             padding: 0.8rem 1.5rem !important;
@@ -53,64 +44,38 @@
             transition: all 0.3s ease;
             font-weight: 500;
         }
-
         .nav-student-link:hover {
             background: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
         }
-
-        .notification-badge {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #ef4444;
-            color: white;
-            border-radius: 50%;
-            padding: 4px 8px;
-            font-size: 0.75rem;
-        }
-
-        .student-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--accent-color);
-        }
-
         .dropdown-student-menu {
             border-radius: 12px;
             border: none;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             background: var(--dark-bg);
         }
-
         .dropdown-student-item {
             color: #fff;
             padding: 0.75rem 1.5rem;
             transition: all 0.3s ease;
         }
-
         .dropdown-student-item:hover {
             background: var(--primary-color);
             padding-left: 2rem;
         }
-
-        @media (max-width: 992px) {
-            .nav-student-link {
-                padding: 0.8rem !important;
-                margin: 0.25rem 0;
-            }
-
-            .student-header {
-                padding: 1rem 0;
-            }
+        .fa-bell {
+            font-size: 20px;
+        }
+        .badge-danger {
+            font-size: 1.3rem;
+            padding: 8px 12px;
         }
     </style>
 </head>
 <body>
 
 <!-- Header Étudiant -->
+<header>
 <nav class="navbar navbar-expand-lg navbar-dark student-header fixed-top">
     <div class="container">
         <!-- Logo et Titre -->
@@ -131,17 +96,20 @@
                         <i class="fas fa-calendar-alt me-2"></i>Mes Réservations
                     </a>
                 </li>
-
             </ul>
 
             <!-- Section Droite -->
+
             <div class="d-flex align-items-center">
                 <!-- Notifications -->
                 <div class="position-relative me-3">
-                    <a class="nav-student-link" th:href="@{/etudiant/notifications}">
+                    <a href="#" class="dropdown-toggle notif" data-bs-toggle="dropdown">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge">2</span>
+                        <span class="badge badge-danger" th:text="${notificationsNonLus}"></span>
                     </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/notification/etudiant}">Voir toutes les notifications</a></li>
+                    </ul>
                 </div>
 
                 <!-- Profil Étudiant -->
@@ -154,15 +122,13 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end dropdown-student-menu">
                         <li>
-                            <a class="dropdown-item dropdown-student-item"
-                               th:href="@{/etudiant/profil}">
+                            <a class="dropdown-item dropdown-student-item" th:href="@{/etudiant/profil}">
                                 <i class="fas fa-user-edit me-2"></i>Mon Profil
                             </a>
                         </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
-                            <a class="dropdown-item dropdown-student-item text-danger"
-                               th:href="@{/logout}">
+                            <a class="dropdown-item dropdown-student-item text-danger" th:href="@{/logout}">
                                 <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
                             </a>
                         </li>
@@ -172,6 +138,7 @@
         </div>
     </div>
 </nav>
+</header>
 
 <!-- Contenu Principal -->
 <div class="container pt-5 mt-5">

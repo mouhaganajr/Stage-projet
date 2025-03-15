@@ -58,6 +58,8 @@ public class NotificationController {
         Etudiant etudiant = etudiantService.getEtudiantById(utilisateur.getId());
         List<Notification> notifications= notificationService.findByDestinataire(etudiant);
         model.addAttribute("notifications", notifications);
+        model.addAttribute("nom",utilisateur.getNom());
+        model.addAttribute("prenom",utilisateur.getPrenom().charAt(0));
         return "notification-etudiant";
     }
 

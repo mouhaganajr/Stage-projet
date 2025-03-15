@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import uasz.sn.stage.Authentification.modele.Utilisateur;
 import uasz.sn.stage.Gestion_Materiels.modele.Materiel;
+import uasz.sn.stage.Utilisateur.model.Etudiant;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -34,4 +35,7 @@ public class ReservationModele {
 
     private String message;
 
+//    @ManyToOne
+//    @JoinColumn(name = "enseignant_id", nullable = false)
+//    private Etudiant etudiant;
 }
