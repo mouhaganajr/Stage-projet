@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import uasz.sn.stage.Authentification.modele.Role;
 import uasz.sn.stage.Authentification.modele.Utilisateur;
 import uasz.sn.stage.Authentification.service.UtilisateurService;
-import uasz.sn.stage.Notification.Service.NotificationService;
 import uasz.sn.stage.Utilisateur.model.Administrateur;
 import uasz.sn.stage.Utilisateur.model.Etudiant;
 import uasz.sn.stage.Utilisateur.model.ResponsableUFR;
@@ -28,8 +27,6 @@ public class ResponsableUFRController {
     private ResponsableUFRService responsableUFRService;
     @Autowired
     private UtilisateurService utilisateurService;
-    @Autowired
-    private NotificationService notificationService;
 
     @Autowired
     private EtudiantService etudiantService;
@@ -98,8 +95,7 @@ public class ResponsableUFRController {
         Utilisateur utilisateur=utilisateurService.getUtilisateurParUsername(principal.getName());
         ResponsableUFR responsable= responsableUFRService.getResponsableParId(utilisateur.getId())
                 .orElseThrow(() -> new RuntimeException("Responsable UFR non trouvé pour l'ID : " + utilisateur.getId()));        model.addAttribute("responsable", responsable);
-        Long notificationsNonLus = notificationService.nombreNotificationNonLu(responsable);
-        model.addAttribute("notificationsNonLus", notificationsNonLus);
+
         model.addAttribute("utilisateur", utilisateur);
         model.addAttribute("nom",utilisateur.getNom());
         model.addAttribute("prenom",utilisateur.getPrenom().charAt(0));

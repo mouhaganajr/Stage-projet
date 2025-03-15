@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import uasz.sn.stage.Authentification.modele.Role;
 import uasz.sn.stage.Authentification.modele.Utilisateur;
 import uasz.sn.stage.Authentification.service.UtilisateurService;
-import uasz.sn.stage.Notification.Modele.Notification;
-import uasz.sn.stage.Notification.Service.NotificationService;
+
 import uasz.sn.stage.Utilisateur.model.Etudiant;
 import uasz.sn.stage.Utilisateur.service.EtudiantService;
 
@@ -26,8 +25,7 @@ public class EtudiantController {
     private EtudiantService etudiantService;
     @Autowired
     private UtilisateurService utilisateurService;
-    @Autowired
-    private NotificationService notificationService;
+
 
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -82,8 +80,6 @@ public class EtudiantController {
     public String accueil_Etudiant(Model model, Principal principal){
         Utilisateur utilisateur=utilisateurService.getUtilisateurParUsername(principal.getName());
         Etudiant etudiant = etudiantService.getEtudiantById(utilisateur.getId());
-        Long notificationNonLus= notificationService.nombreNotificationNonLu(etudiant);
-        model.addAttribute("notificationsNonLus", notificationNonLus);
         model.addAttribute("nom",utilisateur.getNom());
         model.addAttribute("prenom",utilisateur.getPrenom().charAt(0));
         return "etudiant-dashboard";

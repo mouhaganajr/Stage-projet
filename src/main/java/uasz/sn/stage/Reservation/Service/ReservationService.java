@@ -10,8 +10,6 @@ import uasz.sn.stage.Authentification.repository.UtilisateurRepository;
 import uasz.sn.stage.Gestion_Materiels.modele.Materiel;
 import uasz.sn.stage.Gestion_Materiels.repository.MaterielRepository;
 
-import uasz.sn.stage.Notification.Modele.Notification;
-import uasz.sn.stage.Notification.Service.NotificationService;
 import uasz.sn.stage.Reservation.Controller.ReservationController;
 import uasz.sn.stage.Reservation.Modele.ReservationModele;
 import uasz.sn.stage.Reservation.Modele.Statut;
@@ -34,8 +32,6 @@ public class ReservationService {
     @Autowired
     private MaterielRepository materielRepository;
 
-    @Autowired
-    private NotificationService notificationService;
 
     @Autowired
     private UtilisateurRepository utilisateurRepository;
@@ -84,11 +80,7 @@ public class ReservationService {
         reservation.setStatut(Statut.valueOf("APPROUVE"));
         reservationRepository.save(reservation);
 
-        Notification notification = new Notification();
-        notification.setLu(false);
-        notification.setDestinataire(reservation.getUtilisateur());
-        notification.setMessage("Votre réservation pour le matériel " + reservation.getMateriel().getNom() + " a été approuvée.");
-        notificationService.envoyerNotification(notification);
+
     }
 
     public void rejeterReservation(Long reservationId) {
@@ -97,11 +89,7 @@ public class ReservationService {
         reservation.setMessage("Vous avez rejeté cette réservation.");
         reservation.setStatut(Statut.valueOf("REJETE"));
         reservationRepository.save(reservation);
-        Notification notification = new Notification();
-        notification.setLu(false);
-        notification.setDestinataire(reservation.getUtilisateur());
-        notification.setMessage("Votre réservation pour le matériel " + reservation.getMateriel().getNom() + " a été rejetée.");
-        notificationService.envoyerNotification(notification);
+
     }
 
     public void supprimerReservation(Long reservationId) {reservationRepository.deleteById(reservationId);}
