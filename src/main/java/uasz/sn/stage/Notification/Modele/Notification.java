@@ -5,9 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uasz.sn.stage.Authentification.modele.Utilisateur;
-import uasz.sn.stage.Utilisateur.model.Administrateur;
-import uasz.sn.stage.Utilisateur.model.Etudiant;
-import uasz.sn.stage.Utilisateur.model.ResponsableUFR;
 
 import java.util.Date;
 

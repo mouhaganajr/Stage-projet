@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord - Responsable UFR</title>
+    <title>Liste des Matériels</title>
 
     <!-- Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -219,13 +220,6 @@
                 font-size: 1rem;
             }
         }
-        .badge-danger {
-            font-size: 1.3rem;
-            padding: 8px 12px;
-        }
-        .fa-bell{
-            font-size: 20px;
-        }
     </style>
 </head>
 <body>
@@ -240,7 +234,7 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/responsable/etudiant}">
-                        <i class="fas fa-users-cog me-2"></i> Etudiant
+                        <i class="fas fa-users-cog me-2"></i> Utilisateurs
                     </a>
                 </li>
                 <li class="nav-item">
@@ -255,16 +249,10 @@
                 </li>
             </ul>
 
-
             <div class="d-flex align-items-center">
-                <div class="dropdown">
-                    <a href="#" class="dropdown-toggle notif" data-toggle="dropdown">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge badge-danger" th:text="${notificationsNonLus}"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a th:href="@{/notification/responsable}">Voir toutes les notifications</a></li>
-                    </ul>
+                <div class="position-relative me-3">
+                    <i class="fas fa-bell nav-icon text-white"></i>
+                    <span class="notification-badge">3</span>
                 </div>
 
                 <i class="fas fa-sync-alt nav-icon text-white" onclick="location.reload()"></i>
@@ -285,53 +273,67 @@
             </div>
         </div>
     </div>
-</nav>
+</nav> <br> <br> <br> <br>
 
-<!-- Contenu Principal -->
-<div class="container pt-5">
-    <div class="welcome-section text-white">
-        <h1 class="display-5 fw-bold mb-3">Bonjour, <span th:text="${prenom}" class="gradient-text"></span>!</h1>
-        <p class="lead mb-0">Plateforme de gestion intégrée de l'UFR</p>
-    </div>
 
-    <div class="metrics-grid">
-        <div class="metric-card">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="metric-icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <div class="text-end">
-                    <h2 class="mb-0 display-6">1,452</h2>
-                    <span class="text-muted">Étudiants</span>
-                </div>
-            </div>
-        </div>
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">📋 Liste des Matériels</h2>
 
-        <div class="metric-card">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="metric-icon">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <div class="text-end">
-                    <h2 class="mb-0 display-6">289</h2>
-                    <span class="text-muted">Documents</span>
-                </div>
-            </div>
-        </div>
 
-        <div class="metric-card">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="metric-icon">
-                    <i class="fas fa-box-open"></i>
-                </div>
-                <div class="text-end">
-                    <h2 class="mb-0 display-6">56</h2>
-                    <span class="text-muted">Matériels</span>
-                </div>
-            </div>
-        </div>
-    </div>
+
+
+    <!-- Tableau des Matériels -->
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>Icône</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Catégorie</th>
+            <th>État</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="materiel : ${materiels}">
+            <td>
+                <!-- Icônes en fonction de la catégorie -->
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).ORDINATEUR}" class="fas fa-laptop fa-2x"></i>
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).IMPRIMANTE}" class="fas fa-print fa-2x"></i>
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).SERVEUR}" class="fas fa-server fa-2x"></i>
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).CABLE_HDMI}" class="fas fa-plug fa-2x"></i>
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).CABLE_VGA}" class="fas fa-vr-cardboard fa-2x"></i>
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).MULTIPRISE}" class="fas fa-plug-circle-bolt fa-2x"></i>
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).VIDEO_PROJECTEUR}" class="fas fa-video fa-2x"></i>
+                <i th:if="${materiel.categorie == T(uasz.sn.stage.Gestion_Materiels.modele.Categorie).CABLE_ETHENET}" class="fas fa-network-wired fa-2x"></i>
+            </td>
+            <td th:text="${materiel.nom}"></td>
+            <td th:text="${materiel.description}"></td>
+            <td th:text="${materiel.categorie}"></td>
+            <td th:text="${materiel.etat}"></td>
+
+        </tr>
+        </tbody>
+    </table>
 </div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#ajoutMaterielForm").submit(function(event) {
+            event.preventDefault(); // Empêche le rechargement de la page
+            var formData = $(this).serialize(); // Récupère les données du formulaire
+
+            $.post("/materiels/ajouter", formData, function() {
+                $("#form_Ajouter_Materiel").modal("hide"); // Ferme le modal
+                location.reload(); // Recharge la page pour voir le nouveau matériel
+            });
+        });
+    });
+</script>
+
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
