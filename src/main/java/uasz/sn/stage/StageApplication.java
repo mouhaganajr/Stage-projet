@@ -8,6 +8,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import uasz.sn.stage.Authentification.modele.Role;
 import uasz.sn.stage.Authentification.service.UtilisateurService;
+import uasz.sn.stage.Gestion_Materiels.modele.Categorie;
+import uasz.sn.stage.Gestion_Materiels.modele.Materiel;
+import uasz.sn.stage.Gestion_Materiels.service.MaterielService;
+import uasz.sn.stage.Gestion_Ufr.modele.Ufr;
+import uasz.sn.stage.Gestion_Ufr.service.UfrService;
 import uasz.sn.stage.Utilisateur.model.Administrateur;
 import uasz.sn.stage.Utilisateur.model.Chef;
 import uasz.sn.stage.Utilisateur.model.Etudiant;
@@ -21,6 +26,11 @@ import java.util.Date;
 
 @SpringBootApplication
 public class StageApplication implements CommandLineRunner {
+
+    @Autowired
+    private UfrService ufrService;
+    @Autowired
+    private MaterielService materielService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(StageApplication.class, args);
@@ -76,6 +86,16 @@ public class StageApplication implements CommandLineRunner {
 		etudiantService.ajouterEtudiant(user3);
 		utilisateurService.ajouter_UtilisateurRoles(user3,etudiant);
 
+		Ufr ufr= new Ufr();
+		ufr.setNom("ST");
+		ufrService.createUfr(ufr);
+
+		Materiel materiel = new Materiel();
+		materiel.setNom("Ordiateur");
+		materiel.setEtat("new");
+		materiel.setDescription("Ram 4");
+		materiel.setCategorie(Categorie.ORDINATEUR);
+		materielService.ajouterMateriel(materiel);
 
 
 

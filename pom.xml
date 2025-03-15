@@ -28,6 +28,11 @@
 	</scm>
 	<properties>
 		<java.version>17</java.version>
+<<<<<<< HEAD
+=======
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+>>>>>>> 0fee3a8a4643cecf83a6df6a260c9531fff6975b
 	</properties>
 	<dependencies>
 		<dependency>
@@ -91,10 +96,19 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
+<<<<<<< HEAD
+=======
+					<source>17</source>
+					<target>17</target>
+>>>>>>> 0fee3a8a4643cecf83a6df6a260c9531fff6975b
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
+<<<<<<< HEAD
+=======
+							<version>1.18.30</version>
+>>>>>>> 0fee3a8a4643cecf83a6df6a260c9531fff6975b
 						</path>
 					</annotationProcessorPaths>
 				</configuration>

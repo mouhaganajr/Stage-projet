@@ -35,7 +35,6 @@ public class ReservationModele {
 
     private String message;
 
-//    @ManyToOne
-//    @JoinColumn(name = "enseignant_id", nullable = false)
-//    private Etudiant etudiant;
+    private boolean rendu = false;
+
 }
