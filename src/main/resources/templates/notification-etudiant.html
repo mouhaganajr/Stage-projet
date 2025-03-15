@@ -70,6 +70,9 @@
             font-size: 1.3rem;
             padding: 8px 12px;
         }
+        .message-container{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -106,7 +109,6 @@
                     <div class="position-relative me-3">
                         <a href="#" class="dropdown-toggle notif" data-bs-toggle="dropdown">
                             <i class="fas fa-bell"></i>
-                            <span class="badge badge-danger" th:text="${notificationsNonLus}"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" th:href="@{/notification/etudiant}">Voir toutes les notifications</a></li>
@@ -140,6 +142,12 @@
         </div>
     </nav>
 </header>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 
 <div class="message-container">

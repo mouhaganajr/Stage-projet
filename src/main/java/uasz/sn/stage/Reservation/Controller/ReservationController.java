@@ -16,8 +16,11 @@ import uasz.sn.stage.Gestion_Materiels.modele.Materiel;
 import uasz.sn.stage.Gestion_Materiels.service.MaterielService;
 import uasz.sn.stage.Gestion_Ufr.modele.Ufr;
 import uasz.sn.stage.Gestion_Ufr.service.UfrService;
+import uasz.sn.stage.Notification.Service.NotificationService;
 import uasz.sn.stage.Reservation.Modele.ReservationModele;
 import uasz.sn.stage.Reservation.Service.ReservationService;
+import uasz.sn.stage.Utilisateur.model.Etudiant;
+import uasz.sn.stage.Utilisateur.service.EtudiantService;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -40,6 +43,10 @@ public class ReservationController {
     private UtilisateurService utilisateurService;
     @Autowired
     private UfrService ufrService;
+    @Autowired
+    private NotificationService notificationService;
+    @Autowired
+    private EtudiantService etudiantService;
 
     private static final Logger logger = LoggerFactory.getLogger(ReservationController.class);
 
@@ -76,6 +83,9 @@ public class ReservationController {
         List<Ufr> ufrs = ufrService.literUfr();
         model.addAttribute("ufrs", ufrs);
         Utilisateur utilisateur = utilisateurService.getUtilisateurParUsername(principal.getName());
+        Etudiant etudiant = etudiantService.getEtudiantById(utilisateur.getId());
+        Long notificationNonLus= notificationService.nombreNotificationNonLu(etudiant);
+        model.addAttribute("notificationsNonLus", notificationNonLus);
         model.addAttribute("utilisateur", utilisateur);
         model.addAttribute("nom", utilisateur.getNom());
         model.addAttribute("prenom", utilisateur.getPrenom().charAt(0));
