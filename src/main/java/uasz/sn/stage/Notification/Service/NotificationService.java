@@ -4,10 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import uasz.sn.stage.Authentification.modele.Utilisateur;
+import uasz.sn.stage.Notification.Repository.NotificationRepository;
 import uasz.sn.stage.Reservation.Modele.ReservationModele;
 import uasz.sn.stage.Reservation.Repository.ReservationRepository;
-import uasz.sn.stage.Utilisateur.model.Administrateur;
-import uasz.sn.stage.Utilisateur.model.ResponsableUFR;
 
 
 import java.time.LocalDateTime;
@@ -17,7 +16,7 @@ import java.util.List;
 public class NotificationService {
 
     @Autowired
-    private uasz.sn.stage.Notification.Repository.NotificationRepository notificationRepository;
+    private NotificationRepository notificationRepository;
     @Autowired
     private ReservationRepository reservationRepository;
 

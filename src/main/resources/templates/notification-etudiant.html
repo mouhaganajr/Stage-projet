@@ -175,7 +175,7 @@
                         <a class="btn btn-link dropdown-toggle d-flex align-items-center"
                            href="#" role="button" data-bs-toggle="dropdown">
                             <div class="ms-2 text-white">
-                                <span th:text="${prenom + ' ' + nom}"></span>
+                                <span th:text="${utilisateur.prenom + ' ' + utilisateur.nom}"></span>
                             </div>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-student-menu">
@@ -211,13 +211,13 @@
     <!-- Notifications -->
     <div th:each="notification : ${notifications}"
          class="message-row"
-         th:classappend="${notification.lu} ? '' : 'unread'">
+         th:classappend="${notification.isLu()} ? '' : 'unread'">
         <div class="message-details">
             <p class="message-text" th:text="${notification.message}"></p>
             <small class="message-date" th:text="${#dates.format(notification.dateNotification, 'dd/MM/yyyy HH:mm')}"></small>
         </div>
         <!-- Bouton pour ouvrir le modal -->
-        <button th:if="${!notification.isLu()}" class="btn-read" data-toggle="modal" th:attr="data-target='#lecture' + ${notification.id}">
+        <button th:if="${!notification.isLu()}" class="btn-read" data-bs-toggle="modal" th:attr="data-bs-target='#lecture' + ${notification.id}">
             <i class="fas fa-check"></i> Lire
         </button>
 
