@@ -1,16 +1,16 @@
 package sn.uasz.m1.tp1.exercice1;
 
-class Exception1 extends Exception {
-    Exception1(String s) {super(s);}
-}
-class Exception2 extends Exception {
-    Exception2(String s) {super(s);}
-}
-class Exception3 extends Exception {
-    Exception3(String s) {super(s);}
-}
+//class Exception1 extends Exception {
+//    Exception1(String s) {super(s);}
+//}
+//class Exception2 extends Exception {
+//    Exception2(String s) {super(s);}
+//}
+//class Exception3 extends Exception {
+//    Exception3(String s) {super(s);}
+//}
 
-public class TestException {
+public class  TestException {
     static void testLevee(int i) throws Exception {
         switch (i) {
             case 1:throw new Exception1 ( " exception de type Exception1" ) ;
